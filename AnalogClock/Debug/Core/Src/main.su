@@ -1,7 +1,7 @@
-../Core/Src/main.c:65:5:main	16	static
-../Core/Src/main.c:142:6:SystemClock_Config	72	static
-../Core/Src/main.c:179:13:MX_GPIO_Init	32	static
-../Core/Src/main.c:209:6:clearAllClock	8	static
-../Core/Src/main.c:225:6:setNumberOnClock	16	static
-../Core/Src/main.c:268:6:clearNumberOnClock	16	static
-../Core/Src/main.c:316:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:69:5:main	16	static
+../Core/Src/main.c:164:6:SystemClock_Config	72	static
+../Core/Src/main.c:201:13:MX_GPIO_Init	32	static
+../Core/Src/main.c:231:6:clearAllClock	8	static
+../Core/Src/main.c:247:6:setNumberOnClock	16	static
+../Core/Src/main.c:290:6:clearNumberOnClock	16	static
+../Core/Src/main.c:338:6:Error_Handler	4	static,ignoring_inline_asm

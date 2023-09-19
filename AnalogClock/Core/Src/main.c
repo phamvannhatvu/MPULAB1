@@ -31,6 +31,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define SECONDS_PER_TICK 5
+#define SECOND_CYCLES_PER_MINUTE 5
+#define NUM_OF_TICKS 12
+#define SECOND_DURATION 1
 
 /* USER CODE END PD */
 
@@ -95,39 +99,57 @@ int main(void)
   uint8_t counter_second_led = 0;
   uint8_t counter_minute_led = 0;
   uint8_t counter_hour_led = 0;
+  uint8_t counter_second_cycles = SECOND_CYCLES_PER_MINUTE;
+  uint8_t counter_second = SECONDS_PER_TICK;
+  uint8_t timer_counter = SECOND_DURATION;
   clearAllClock();
   setNumberOnClock(counter_second_led);
   setNumberOnClock(counter_minute_led);
   setNumberOnClock(counter_hour_led);
   while (1)
   {
-	  clearNumberOnClock(counter_second_led);
-	  clearNumberOnClock(counter_minute_led);
-	  clearNumberOnClock(counter_hour_led);
-
-	  ++counter_second_led;
-	  if (counter_second_led == 12)
+	  if (timer_counter <= 0)
 	  {
-		  counter_second_led = 0;
-		  ++counter_minute_led;
+		  timer_counter = SECOND_DURATION;
+		  --counter_second;
+		  if (counter_second <= 0)
+		  {
+			  counter_second = SECONDS_PER_TICK;
+			  clearNumberOnClock(counter_second_led);
+			  clearNumberOnClock(counter_minute_led);
+			  clearNumberOnClock(counter_hour_led);
+
+			  ++counter_second_led;
+			  if (counter_second_led == NUM_OF_TICKS)
+			  {
+				  counter_second_led = 0;
+				  --counter_second_cycles;
+				  if (counter_second_cycles <= 0)
+				  {
+					  counter_second_cycles = SECOND_CYCLES_PER_MINUTE;
+					  ++counter_minute_led;
+				  }
+			  }
+
+			  if (counter_minute_led == NUM_OF_TICKS)
+			  {
+				  counter_minute_led = 0;
+				  ++counter_hour_led;
+			  }
+
+			  if (counter_hour_led == NUM_OF_TICKS)
+			  {
+				  counter_hour_led = 0;
+			  }
+
+
+			  setNumberOnClock(counter_second_led);
+			  setNumberOnClock(counter_minute_led);
+			  setNumberOnClock(counter_hour_led);
+		  }
 	  }
-
-	  if (counter_minute_led == 12)
-	  {
-		  counter_minute_led = 0;
-		  ++counter_hour_led;
-	  }
-
-	  if (counter_hour_led == 12)
-	  {
-		  counter_hour_led = 0;
-	  }
-
-
-	  setNumberOnClock(counter_second_led);
-	  setNumberOnClock(counter_minute_led);
-	  setNumberOnClock(counter_hour_led);
-	  HAL_Delay(500);
+	  --timer_counter;
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

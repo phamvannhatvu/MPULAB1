@@ -1,7 +1,7 @@
-main.c:65:5:main	4
-main.c:142:6:SystemClock_Config	3
-main.c:179:13:MX_GPIO_Init	1
-main.c:209:6:clearAllClock	1
-main.c:225:6:setNumberOnClock	13
-main.c:268:6:clearNumberOnClock	13
-main.c:316:6:Error_Handler	1
+main.c:69:5:main	7
+main.c:164:6:SystemClock_Config	3
+main.c:201:13:MX_GPIO_Init	1
+main.c:231:6:clearAllClock	1
+main.c:247:6:setNumberOnClock	13
+main.c:290:6:clearNumberOnClock	13
+main.c:338:6:Error_Handler	1
