@@ -107,7 +107,6 @@ int main(void)
   uint8_t state1 = RED_STATE;
   uint8_t count2 = GREEN_DURATION;
   uint8_t state2 = GREEN_STATE;
-  int counter = 0;
   while (1)
   {
 	  switch (state1)
@@ -143,6 +142,7 @@ int main(void)
 		  }
 		  break;
 	  }
+	  display7SEG(count1);
 	  --count1;
 
 	  switch (state2)
@@ -180,8 +180,6 @@ int main(void)
 	  }
 	  --count2;
 
-	  if (counter >= 10) counter = 0;
-	  display7SEG(counter++);
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
