@@ -92,7 +92,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(RED_LED_GPIO_Port, YELLOW_LED_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, GPIO_PIN_SET);
   uint8_t count = TRANSITION_TIME;
   while (1)
   {
