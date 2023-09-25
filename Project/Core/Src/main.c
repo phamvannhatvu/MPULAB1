@@ -31,23 +31,32 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define RED_DURATION 5
-#define YELLOW_DURATION 2
-#define GREEN_DURATION 3
-#define RED_STATE 0
-#define GREEN_STATE 1
-#define YELLOW_STATE 2
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+enum TrafficLightState
+{
+	RED1_GREEN2,
+	RED1_YELLOW2,
+	GREEN1_RED2,
+	YELLOW1_RED2
+};
 
+enum Led
+{
+	RED1,
+	RED2,
+	GREEN1,
+	GREEN2,
+	YELLOW1,
+	YELLOW2
+};
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,11 +64,14 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 void display7SEG(int);
-
+void turnOnLight(enum Led);
+void clearAllLed();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
 
 /* USER CODE END 0 */
 
@@ -97,89 +109,68 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_GPIO_WritePin(RED_LED1_GPIO_Port, RED_LED1_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(YELLOW_LED1_GPIO_Port, YELLOW_LED1_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GREEN_LED1_GPIO_Port, GREEN_LED1_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(RED_LED2_GPIO_Port, RED_LED2_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(YELLOW_LED2_GPIO_Port, YELLOW_LED2_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GREEN_LED2_GPIO_Port, GREEN_LED2_Pin, GPIO_PIN_SET);
-  uint8_t count1 = RED_DURATION;
-  uint8_t state1 = RED_STATE;
-  uint8_t count2 = GREEN_DURATION;
-  uint8_t state2 = GREEN_STATE;
+  turnOnLight(RED1);
+  turnOnLight(GREEN1);
+  uint8_t count = 3;
+  uint8_t light = 5;
+  uint8_t state = RED1_GREEN2;
   while (1)
   {
-	  switch (state1)
+	  display7SEG(light);
+	  switch (state)
 	  {
-	  case RED_STATE:
-		  HAL_GPIO_WritePin(RED_LED1_GPIO_Port, RED_LED1_Pin, GPIO_PIN_SET);
-		  if (count1 <= 0)
+	  case RED1_GREEN2:
+		  clearAllLed();
+		  turnOnLight(RED1);
+		  turnOnLight(GREEN2);
+		  --count;
+		  --light;
+		  if (count <= 0)
 		  {
-			  count1 = GREEN_DURATION;
-			  state1 = GREEN_STATE;
-			  HAL_GPIO_WritePin(RED_LED1_GPIO_Port, RED_LED1_Pin, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(GREEN_LED1_GPIO_Port, GREEN_LED1_Pin, GPIO_PIN_SET);
+			  count = 2;
+			  state = RED1_YELLOW2;
 		  }
 		  break;
-	  case GREEN_STATE:
-		  HAL_GPIO_WritePin(GREEN_LED1_GPIO_Port, GREEN_LED1_Pin, GPIO_PIN_SET);
-		  if (count1 <= 0)
+	  case RED1_YELLOW2:
+		  clearAllLed();
+		  turnOnLight(RED1);
+		  turnOnLight(YELLOW2);
+		  --count;
+		  --light;
+		  if (count <= 0)
 		  {
-			  count1 = YELLOW_DURATION;
-			  state1 = YELLOW_STATE;
-			  HAL_GPIO_WritePin(GREEN_LED1_GPIO_Port, GREEN_LED1_Pin, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(YELLOW_LED1_GPIO_Port, YELLOW_LED1_Pin, GPIO_PIN_SET);
+			  count = 3;
+			  light = 3;
+			  state = GREEN1_RED2;
 		  }
 		  break;
-	  case YELLOW_STATE:
-		  HAL_GPIO_WritePin(YELLOW_LED1_GPIO_Port, YELLOW_LED1_Pin, GPIO_PIN_SET);
-		  if (count1 <= 0)
+	  case GREEN1_RED2:
+		  clearAllLed();
+		  turnOnLight(GREEN1);
+		  turnOnLight(RED2);
+		  --count;
+		  --light;
+		  if (count <= 0)
 		  {
-			  count1 = RED_DURATION;
-			  state1 = RED_STATE;
-			  HAL_GPIO_WritePin(YELLOW_LED1_GPIO_Port, YELLOW_LED1_Pin, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(RED_LED1_GPIO_Port, RED_LED1_Pin, GPIO_PIN_SET);
+			  count = 2;
+			  light = 2;
+			  state = YELLOW1_RED2;
+		  }
+		  break;
+	  case YELLOW1_RED2:
+		  clearAllLed();
+		  turnOnLight(YELLOW1);
+		  turnOnLight(RED2);
+		  --count;
+		  --light;
+		  if (count <= 0)
+		  {
+			  count = 3;
+			  light = 5;
+			  state = RED1_GREEN2;
 		  }
 		  break;
 	  }
-	  display7SEG(count1);
-	  --count1;
-
-	  switch (state2)
-	  {
-	  case RED_STATE:
-		  HAL_GPIO_WritePin(RED_LED2_GPIO_Port, RED_LED2_Pin, GPIO_PIN_SET);
-		  if (count2 <= 0)
-		  {
-			  count2 = GREEN_DURATION;
-			  state2 = GREEN_STATE;
-			  HAL_GPIO_WritePin(RED_LED2_GPIO_Port, RED_LED2_Pin, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(GREEN_LED2_GPIO_Port, GREEN_LED2_Pin, GPIO_PIN_SET);
-		  }
-		  break;
-	  case GREEN_STATE:
-		  HAL_GPIO_WritePin(GREEN_LED2_GPIO_Port, GREEN_LED2_Pin, GPIO_PIN_SET);
-		  if (count2 <= 0)
-		  {
-			  count2 = YELLOW_DURATION;
-			  state2 = YELLOW_STATE;
-			  HAL_GPIO_WritePin(GREEN_LED2_GPIO_Port, GREEN_LED2_Pin, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(YELLOW_LED2_GPIO_Port, YELLOW_LED2_Pin, GPIO_PIN_SET);
-		  }
-		  break;
-	  case YELLOW_STATE:
-		  HAL_GPIO_WritePin(YELLOW_LED2_GPIO_Port, YELLOW_LED2_Pin, GPIO_PIN_SET);
-		  if (count2 <= 0)
-		  {
-			  count2 = RED_DURATION;
-			  state2 = RED_STATE;
-			  HAL_GPIO_WritePin(YELLOW_LED2_GPIO_Port, YELLOW_LED2_Pin, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(RED_LED2_GPIO_Port, RED_LED2_Pin, GPIO_PIN_SET);
-		  }
-		  break;
-	  }
-	  --count2;
-
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
@@ -270,6 +261,40 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void clearAllLed()
+{
+	HAL_GPIO_WritePin(RED_LED1_GPIO_Port, RED_LED1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GREEN_LED1_GPIO_Port, GREEN_LED1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(YELLOW_LED1_GPIO_Port, YELLOW_LED1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(RED_LED2_GPIO_Port, RED_LED2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GREEN_LED2_GPIO_Port, GREEN_LED2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(YELLOW_LED2_GPIO_Port, YELLOW_LED2_Pin, GPIO_PIN_RESET);
+}
+
+void turnOnLight(enum Led led)
+{
+	switch (led)
+	{
+	case RED1:
+		HAL_GPIO_WritePin(RED_LED1_GPIO_Port, RED_LED1_Pin, GPIO_PIN_SET);
+		break;
+	case GREEN1:
+		HAL_GPIO_WritePin(GREEN_LED1_GPIO_Port, GREEN_LED1_Pin, GPIO_PIN_SET);
+		break;
+	case YELLOW1:
+		HAL_GPIO_WritePin(YELLOW_LED1_GPIO_Port, YELLOW_LED1_Pin, GPIO_PIN_SET);
+		break;
+	case RED2:
+		HAL_GPIO_WritePin(RED_LED2_GPIO_Port, RED_LED2_Pin, GPIO_PIN_SET);
+		break;
+	case GREEN2:
+		HAL_GPIO_WritePin(GREEN_LED2_GPIO_Port, GREEN_LED2_Pin, GPIO_PIN_SET);
+		break;
+	case YELLOW2:
+		HAL_GPIO_WritePin(YELLOW_LED2_GPIO_Port, YELLOW_LED2_Pin, GPIO_PIN_SET);
+		break;
+	}
+}
 void display7SEG(int number)
 {
 	switch (number)
