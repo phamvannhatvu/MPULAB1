@@ -120,7 +120,7 @@ int main(void)
 			  clearNumberOnClock(counter_hour_led);
 
 			  ++counter_second_led;
-			  if (counter_second_led == NUM_OF_TICKS)
+			  if (counter_second_led >= NUM_OF_TICKS)
 			  {
 				  counter_second_led = 0;
 				  --counter_second_cycles;
@@ -131,13 +131,13 @@ int main(void)
 				  }
 			  }
 
-			  if (counter_minute_led == NUM_OF_TICKS)
+			  if (counter_minute_led >= NUM_OF_TICKS)
 			  {
 				  counter_minute_led = 0;
 				  ++counter_hour_led;
 			  }
 
-			  if (counter_hour_led == NUM_OF_TICKS)
+			  if (counter_hour_led >= NUM_OF_TICKS)
 			  {
 				  counter_hour_led = 0;
 			  }
